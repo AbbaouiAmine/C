@@ -1,0 +1,125 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+//===============================================================
+//===================Partie 1====================================
+//===============================================================
+//structures
+typedef struct wagon
+{
+	unsigned int sieges,passagers;
+}wagon;
+
+wagon* wagon_init(int n)
+{
+	int i;
+	wagon* w=(wagon*)malloc(n*sizeof(wagon));
+	if(w!=NULL)
+	{
+		for(i=0;i<n;i++)
+		{
+			w[i].passagers=0;
+			w[i].sieges=60;
+		}
+
+	}
+	else
+	{
+		printf("Memoire insuffisant!!\n");
+	}
+	return w;
+}
+
+unsigned int wagon_places_dispo(wagon* w)
+{
+    //if
+	return w->sieges-w->passagers;
+}
+
+unsigned int wagon_ajouter_passagers(wagon* w,unsigned int npass)
+{
+	int notAff=0;
+	if(npass<=wagon_places_dispo(w))
+	{
+		w->passagers+=w->passagers+npass;
+		return 0;
+	}
+	notAff=npass-(60-w->passagers);
+	w->passagers=60;
+	return notAff;
+}
+void show_wagons(wagon* w,int n)
+{
+	int i;
+	printf("\n=========================================================\n");
+	printf("numero Wagon\t nombre des passagers \t\t sieges\n");
+	for(i=0;i<n;i++)
+	{
+		printf("%d \t\t %d \t\t\t\t %d\n",i+1,w[i].passagers,w[i].sieges);
+	}
+}
+
+//===============================================================
+//===================Partie 2====================================
+//===============================================================
+typedef struct train{
+	unsigned nombreW;
+	wagon* w;
+}train;
+
+train* traint_init(int n)
+{
+	train * t=(train*)malloc(sizeof(train));
+	if(t!=NULL)
+	{
+		t->nombreW=n;
+		t->w=wagon_init(n);
+	}
+	else
+	{
+		printf("Memoire insuffisant!!\n");
+	}
+	return t;
+}
+void train_ajouter_wagon(train * t,wagon * w)
+{
+	int i;
+	wagon * wtofree;
+	wagon* wnew=wagon_init(t->nombreW+1);
+	if(wnew!=0)
+	{
+		for(i=0;i<t->nombreW;i++)
+		{
+			wnew[i].passagers=t->w[i].passagers;
+			wnew[i].sieges=t->w[i].sieges;
+		}
+		wtofree=t->w;
+		t->w=wnew;
+		free(wtofree);
+		t->nombreW++;
+   }
+}
+
+void train_libre(train * t)
+{
+	free(t);
+}
+
+//===============================================================
+//===============================================================
+//===============================================================
+int main(int argc, char *argv[]) {
+	int n,ajout,najout;wagon * t;
+	printf("Entrer le nombre des wagons : ");
+	scanf("%d",&n);
+	t=wagon_init(n);
+	show_wagons(t,n);
+	printf("Entrer le nombre des passagers a ajouter :");
+	scanf("%d",&ajout);
+	najout=wagon_ajouter_passagers(t,ajout);
+	printf("Le nobre des passagers non ajoute : %d .",najout);
+	system("pause");
+	return 0;
+}
+

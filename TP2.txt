@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct livre
+{
+ char * titre;
+ char * nom ;
+ int annee;
+};
+ typedef struct livre livre ;
+ struct biblio
+{
+ livre * l;
+ int nbrl;
+};
+ typedef struct biblio biblio ;
+
+ void ajouter_livre(biblio *b)
+ {
+ //Allocation
+ livre *l=(livre*)malloc(1*sizeof(livre));
+ l->titre=(char *)malloc(200*sizeof(char));
+ l->nom=(char *)malloc(100*sizeof(char));
+ if(l!=NULL && l->titre!=NULL && l->nom!=NULL)
+ {
+     printf("donne le titre de livre : ");
+     scanf("%s",l->titre);
+     printf("donne le nom de l auteur : ");
+     scanf("%s",l->nom);
+     printf("donne l anne : ");
+     scanf("%d",&l->annee);
+     b->l=l;
+     b->nbrl++;
+ }
+ else{
+    printf("Memoire insuffisant");
+ }
+
+ }
+
+ //////////////////////////////////////////////
+ void afficheParanne(biblio *b,int anne)
+ {
+   int i;
+   for(i=0;i<b->nbrl;i++)
+   {
+       if(((b->l)+i)->annee >= anne)
+       {
+           printf("\n===================================\n");
+           printf("\n titre \t\t nom \t\t anne\n");
+           puts(((b->l)+i)->titre);
+           printf("\t\t");
+           puts(((b->l)+i)->nom);
+           printf("\t\t");
+           printf("%d",((b->l)+i)->annee);
+           printf("\t\t");
+       }
+   }
+ }
+ //////////////////////////////////////////////////
+  void afficheParAuteur(biblio *b,char * aut)
+ {
+   int i;
+   for(i=0;i<b->nbrl;i++)
+   {
+       if(strcmp(((b->l)+i)->nom,aut)==0)
+       {
+           printf("\n===================================\n");
+           printf("\n titre \t\t nom \t\t anne\n");
+           puts(((b->l)+i)->titre);
+           printf("\t\t");
+           puts(((b->l)+i)->nom);
+           printf("\t\t");
+           printf("%d",((b->l)+i)->annee);
+           printf("\t\t");
+       }
+   }
+ }
+
+
+int main(int argc, char *argv[]) {
+    int i;
+    livre* L;
+    biblio * b=(biblio*)malloc(sizeof(biblio));
+    if(b!=NULL)
+    {
+      b->nbrl=0;
+      b->l=NULL;
+
+      L=(livre*)malloc(3*sizeof(livre));
+      if(L!=NULL)
+      {
+         for(i=0;i<3;i++)
+         {
+            (L+i)->titre="T"+(i+1);
+            (L+i)->nom="N"+(i+1);
+            (L+i)->anne=2000+(i+1);
+         }
+      }
+    }
+
+	system("pause");
+	return 0;
+}
+
